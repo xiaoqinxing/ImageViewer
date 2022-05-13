@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>YUVEditor</class>
+ <widget class="QMainWindow" name="YUVEditor">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>YUV图片查看工具</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../components/resource.qrc">
+    <normaloff>:/tool_icon/resource/main.png</normaloff>:/tool_icon/resource/main.png</iconset>
+  </property>
+  <property name="toolTip">
+   <string/>
+  </property>
+  <property name="toolTipDuration">
+   <number>-1</number>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::GroupedDragging|QMainWindow::VerticalTabs</set>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="photo_title">
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::AllToolBarAreas</set>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>RightToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="openimage"/>
+   <addaction name="saveimage"/>
+   <addaction name="yuvconfig"/>
+   <addaction name="deletephoto"/>
+   <addaction name="actionstats"/>
+   <addaction name="prephoto"/>
+   <addaction name="nextphoto"/>
+   <addaction name="rotateright"/>
+   <addaction name="add_compare"/>
+  </widget>
+  <action name="saveimage">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/save_icon.png</normaloff>:/tool_icon/resource/save_icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="openimage">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/open.png</normaloff>:/tool_icon/resource/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>open</string>
+   </property>
+   <property name="toolTip">
+    <string>open</string>
+   </property>
+  </action>
+  <action name="actionstats">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/stats.png</normaloff>:/tool_icon/resource/stats.png</iconset>
+   </property>
+   <property name="text">
+    <string>统计信息</string>
+   </property>
+   <property name="toolTip">
+    <string>统计信息</string>
+   </property>
+  </action>
+  <action name="nextphoto">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/down.png</normaloff>:/tool_icon/resource/down.png</iconset>
+   </property>
+   <property name="text">
+    <string>下一个图片</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
+   </property>
+  </action>
+  <action name="prephoto">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/up.png</normaloff>:/tool_icon/resource/up.png</iconset>
+   </property>
+   <property name="text">
+    <string>上一张图片</string>
+   </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="deletephoto">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/delete.png</normaloff>:/tool_icon/resource/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>删除</string>
+   </property>
+   <property name="toolTip">
+    <string>删除</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="add_compare">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/add.png</normaloff>:/tool_icon/resource/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>添加对比图片</string>
+   </property>
+  </action>
+  <action name="rotateright">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/right.png</normaloff>:/tool_icon/resource/right.png</iconset>
+   </property>
+   <property name="text">
+    <string>顺时针旋转</string>
+   </property>
+  </action>
+  <action name="yuvconfig">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/config.png</normaloff>:/tool_icon/resource/config.png</iconset>
+   </property>
+   <property name="text">
+    <string>YUV配置</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../components/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

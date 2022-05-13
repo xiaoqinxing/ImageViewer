@@ -1,0 +1,10 @@
+build/
+dist/
+*.spec
+__pycache__/
+*.pyc
+settings.json
+*.mp4
+config/
+*.exe
+*.raw

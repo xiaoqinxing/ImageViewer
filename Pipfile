@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pyside2 = "*"
+numpy = "*"
+opencv-python = "*"
+logging = "*"
+natsort = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

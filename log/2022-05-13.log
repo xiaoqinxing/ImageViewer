@@ -1,0 +1,10 @@
+2022-05-13 22:51:53,098 - logconfig.py[line:26] - INFO: logging module init is ok
+2022-05-13 23:09:25,257 - logconfig.py[line:26] - INFO: logging module init is ok
+2022-05-13 23:10:37,817 - logconfig.py[line:26] - INFO: logging module init is ok
+2022-05-13 23:10:47,216 - status_code_enum.py[line:21] - ERROR: Traceback (most recent call last):
+  File "D:\study\python\ImageView/image_viewer.py", line 89, in __init_img
+    self.img.load_file(filename)
+  File "D:\study\python\ImageView\components\BasicImage.py", line 53, in load_file
+    raise FileNotFoundErr
+components.status_code_enum.FileNotFoundErr: 文件不存在
+
