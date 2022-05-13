@@ -8,3 +8,4 @@ settings.json
 config/
 *.exe
 *.raw
+log/
