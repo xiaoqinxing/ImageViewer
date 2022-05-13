@@ -146,8 +146,9 @@ class ImageView(QGraphicsView):
     sceneMousePos = None
     scale_ratio = 1.0
 
-    def __init__(self, scene, parent=None):
-        super().__init__(scene, parent)
+    def __init__(self, parent=None):
+        self.scene = QGraphicsScene()
+        super().__init__(self.scene, parent)
         self.setUi()
 
     def setUi(self):

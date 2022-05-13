@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QGraphicsScene, QFileDialog, QMainWindow
+from PySide2.QtWidgets import QFileDialog, QMainWindow
 from components.customwidget import ImageView
 from components.status_code_enum import ImageToolError
 from components.histview import HistView
@@ -21,8 +21,7 @@ class ImageViewer(QMainWindow):
         self.config.configUpdateEvent.connect(
             lambda: self.__init_img(self.img.imgpath))  # 配置界面参数更新
 
-        self.scene = QGraphicsScene()
-        self.imageview = ImageView(self.scene, self)
+        self.imageview = ImageView(self)
         # 由于graphicsView被自定义了，需要重新定义一下UI，gridlayout还需要重新加一下widget
         self.ui.gridLayout.addWidget(self.imageview, 0, 1, 3, 1)
         self.imageview.sigDragEvent.connect(self.__init_img)
@@ -89,7 +88,7 @@ class ImageViewer(QMainWindow):
 
     def __display_img(self, indexstr=''):
         try:
-            self.img.display_in_scene(self.scene)
+            self.img.display_in_scene(self.imageview.scene)
             self.ui.photo_title.setTitle(indexstr + self.img.imgpath)
             if self.hist_window is not None and self.hist_window.enable is True:
                 self.hist_window.update_rect_data(self.img.img, self.rect)
