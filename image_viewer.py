@@ -1,17 +1,13 @@
-from PySide2.QtWidgets import QGraphicsScene, QFileDialog, QMainWindow, QApplication
-from PySide2.QtCore import Qt
-from sys import exit
-import components.logconfig as log
+from PySide2.QtWidgets import QGraphicsScene, QFileDialog, QMainWindow
 from components.customwidget import ImageView
 from components.status_code_enum import ImageToolError
-from components.window import SubWindow
 from components.histview import HistView
 from ui.yuvviewer_window import Ui_YUVEditor
 from components.BasicImage import ImageBasic
 from image_config import YUVConfig
 
 
-class YUVViewer(QMainWindow):
+class ImageViewer(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = Ui_YUVEditor()
@@ -131,14 +127,3 @@ class YUVViewer(QMainWindow):
             self.rect = [0, 0, self.img.img.shape[1], self.img.img.shape[0]]
             self.hist_window.update_rect_data(self.img.img, self.rect)
             self.hist_window.show()
-
-
-if __name__ == "__main__":
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
-    apps = QApplication([])
-    apps.setStyle('Fusion')
-    log.clean_old_log()
-    log.init_log()
-    appswindow = YUVViewer()
-    appswindow.show()
-    exit(apps.exec_())

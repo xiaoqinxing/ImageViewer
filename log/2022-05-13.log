@@ -8,3 +8,5 @@
     raise FileNotFoundErr
 components.status_code_enum.FileNotFoundErr: 文件不存在
 
+2022-05-13 23:15:01,363 - logconfig.py[line:26] - INFO: logging module init is ok
+2022-05-13 23:20:09,726 - logconfig.py[line:26] - INFO: logging module init is ok
