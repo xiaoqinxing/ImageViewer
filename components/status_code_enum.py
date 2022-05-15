@@ -1,7 +1,7 @@
 from enum import Enum
 from logging import error
 from traceback import format_exc, print_exc
-from components.customwidget import critical_win
+from components.logconfig import critical_win
 
 
 class StatusCode(Enum):

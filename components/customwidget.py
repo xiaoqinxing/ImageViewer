@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from PySide2.QtWidgets import QMessageBox, QGraphicsScene
 from PySide2.QtGui import QPixmap, QImage
+from components.BasicImage import ImageBasic
+from components.status_code_enum import ImageToolError
 
 
 class MplCanvas(FigureCanvasQTAgg):
@@ -103,48 +105,20 @@ class MatplotlibWidget(QWidget):
             self.plt.axes.grid(True)
 
 
-class ParamsTable(QWidget):
-    """
-    自定义的镜头参数表
-    """
-
-    def __init__(self, layout):
-        # 6行3列
-        self.tableWidget = QTableWidget(6, 3)
-        self.tableWidget.setHorizontalHeaderLabels(["参数", "值", "单位"])
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.line = 0
-        self.layout = layout
-
-    def append(self, name, value, uint):
-        newItem = QTableWidgetItem(name)
-        self.tableWidget.setItem(self.line, 0, newItem)
-        newItem = QTableWidgetItem(value)
-        self.tableWidget.setItem(self.line, 1, newItem)
-        newItem = QTableWidgetItem(uint)
-        self.tableWidget.setItem(self.line, 2, newItem)
-        self.line += 1
-
-    def show(self):
-        self.layout.addWidget(self.tableWidget)
-
-    def clean(self):
-        self.layout.removeWidget(self.tableWidget)
-        self.tableWidget = QTableWidget(6, 3)
-        self.tableWidget.setHorizontalHeaderLabels(["参数", "值", "单位"])
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.line = 0
-
-
 class ImageView(QGraphicsView):
     """
     自定义的图片显示（可以获取到鼠标位置和放大比例）
     """
-    sigMouseMovePoint = Signal(QPointF)
-    sigWheelEvent = Signal(float)
-    sigDragEvent = Signal(str)
-    sceneMousePos = None
+    img = ImageBasic()
+    sigUpdatePointStatusEvent = Signal(str)  # 注意 signal不能嵌套
+    filenameUpdateEvent = Signal(str)
+    sigRectDataEvent = Signal(int, int, int, int)
+    rect = [0, 0, 0, 0]
+    sceneMousePos = QPointF()
+    startRectPos = QPointF()
+    endRectPos = QPointF()
     scale_ratio = 1.0
+    img_index_str = ''
 
     def __init__(self, parent=None):
         self.scene = QGraphicsScene()
@@ -164,13 +138,25 @@ class ImageView(QGraphicsView):
             QGraphicsView.AnchorViewCenter)
         self.setResizeAnchor(QGraphicsView.AnchorViewCenter)
 
+    def mousePressEvent(self, event):
+        self.startRectPos = self.mapToScene(event.pos())
+        return super().mousePressEvent(event)
+
     def mouseMoveEvent(self, event):
         self.sceneMousePos = self.mapToScene(event.pos())
-        self.sigMouseMovePoint.emit(self.sceneMousePos)
+        self.__update_point_stats()
         return super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if self.dragMode() == QGraphicsView.RubberBandDrag:
+            self.endRectPos = self.mapToScene(event.pos())
+            self.sigRectDataEvent.emit(
+                int(self.startRectPos.x()), int(self.startRectPos.y()), int(self.endRectPos.x()), int(self.endRectPos.y()))
+        return super().mouseReleaseEvent(event)
 
     def wheelEvent(self, event):
         angle = event.angleD.y()
+        self.sceneMousePos = self.mapToScene(event.pos())
         self.centerOn(self.sceneMousePos)
         if (angle > 0):
             self.scale(1.25, 1.25)
@@ -178,82 +164,73 @@ class ImageView(QGraphicsView):
         else:
             self.scale(0.8, 0.8)
             self.scale_ratio *= 0.8
-        self.sigWheelEvent.emit(self.scale_ratio)
+        self.__update_point_stats()
         return super().wheelEvent(event)
-
-    def dragEnterEvent(self, event):
-        event.accept()
-
-    def dragMoveEvent(self, event):
-        event.accept()
 
     def dropEvent(self, event):
         if event.mimeData().hasUrls():
-            try:
-                for url in event.mimeData().urls():
-                    self.sigDragEvent.emit(url.path()[1:])
-            except Exception as e:
-                print(e)
-
-
-class NewImageView(QGraphicsView):
-    """
-    自定义的图片显示（可以获取到鼠标位置和放大比例）
-    """
-    sigMouseMovePoint = Signal(QPointF)
-    sigWheelEvent = Signal(float)
-    sigDragEvent = Signal(str)
-    sceneMousePos = None
-    scale_ratio = 1.0
-
-    def __init__(self, parent=None):
-        self.scene = QGraphicsScene()
-        super().__init__(self.scene, parent)
-        self.setUi()
-
-    def setUi(self):
-        self.setMouseTracking(True)
-        self.setAcceptDrops(True)
-        self.setDragMode(QGraphicsView.ScrollHandDrag)
-        self.setToolTipDuration(-1)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.setSizeAdjustPolicy(
-            QAbstractScrollArea.AdjustToContents)
-        self.setTransformationAnchor(
-            QGraphicsView.AnchorViewCenter)
-        self.setResizeAnchor(QGraphicsView.AnchorViewCenter)
-
-    def mouseMoveEvent(self, event):
-        self.sceneMousePos = self.mapToScene(event.pos())
-        self.sigMouseMovePoint.emit(self.sceneMousePos)
-        return super().mouseMoveEvent(event)
-
-    def wheelEvent(self, event):
-        angle = event.angleD.y()
-        self.centerOn(self.sceneMousePos)
-        if (angle > 0):
-            self.scale(1.25, 1.25)
-            self.scale_ratio *= 1.25
-        else:
-            self.scale(0.8, 0.8)
-            self.scale_ratio *= 0.8
-        self.sigWheelEvent.emit(self.scale_ratio)
-        return super().wheelEvent(event)
-
-    def dragEnterEvent(self, event):
+            urls = event.mimeData().urls()
+            filename = urls[-1].path()[1:]
+            self.init_image(filename)
         event.accept()
 
-    def dragMoveEvent(self, event):
-        event.accept()
+    def __update_point_stats(self):
+        if self.img.img is not None:
+            int_x = int(self.sceneMousePos.x())
+            int_y = int(self.sceneMousePos.y())
+            rgb = self.img.get_img_point(int_x, int_y)
+            if rgb is not None:
+                scale_ratio = int(self.scale_ratio * 100)
+                self.sigUpdatePointStatusEvent.emit("x:{},y:{} : R:{} G:{} B:{} 缩放比例:{}%".format(
+                    int_x, int_y, rgb[2], rgb[1], rgb[0], scale_ratio))
 
-    def dropEvent(self, event):
-        if event.mimeData().hasUrls():
-            try:
-                for url in event.mimeData().urls():
-                    self.sigDragEvent.emit(url.path()[1:])
-            except Exception as e:
-                print(e)
+    def display(self):
+        try:
+            if self.img.img is not None:
+                self.img.display_in_scene(self.scene)
+                self.filenameUpdateEvent.emit(
+                    self.img_index_str + self.img.get_basename())
+                if self.dragMode() == QGraphicsView.RubberBandDrag:
+                    self.sigRectDataEvent.emit(
+                        int(self.startRectPos.x()), int(self.startRectPos.y()), int(self.endRectPos.x()), int(self.endRectPos.y()))
+        except ImageToolError as err:
+            err.show()
+
+    def init_image(self, filename):
+        try:
+            # self.img.load_yuv_config(
+            #     self.config.width, self.config.height, self.config.yuv_format)
+            self.img.load_file(filename)
+            _, index, files_nums = self.img.find_next_time_photo(0)
+            self.img_index_str = "({}/{})".format(index + 1, files_nums)
+            self.display()
+        except ImageToolError as err:
+            err.show()
+
+    def rotate_photo(self, need_saveimg_in_rotate):
+        try:
+            self.img.rotate90()
+            self.display()
+            if need_saveimg_in_rotate is True:
+                self.img.save_image(self.img.imgpath)
+        except ImageToolError as err:
+            err.show()
+
+    def delete_photo(self):
+        self.img.remove_image()
+        next_photo, index, files_nums = self.img.find_next_time_photo(1)
+        self.img_index_str = "({}/{})".format(index, files_nums - 1)
+        self.init_image(next_photo)
+
+    def switch_next_photo(self):
+        next_photo, index, files_nums = self.img.find_next_time_photo(1)
+        self.img_index_str = "({}/{})".format(index + 1, files_nums)
+        self.init_image(next_photo)
+
+    def switch_pre_photo(self):
+        pre_photo, index, files_nums = self.img.find_next_time_photo(-1)
+        self.img_index_str = "({}/{})".format(index + 1, files_nums)
+        self.init_image(pre_photo)
 
 
 class VideoView(QLabel):
@@ -276,32 +253,6 @@ class VideoView(QLabel):
                     self.sigDragEvent.emit(url.path()[1:])
             except Exception as e:
                 print(e)
-
-
-def sceneDisplayImage(scene: QGraphicsScene, img):
-    """
-    img: opencv的图像数据
-    """
-    scene.clear()
-    if img is not None:
-        # numpy转qimage的标准流程
-        if len(img.shape) == 2:
-            bytes_per_line = img.shape[1]
-            qimg = QImage(img, img, img.shape[1],
-                          img.shape[0], QImage.Format_Grayscale8)
-        elif img.shape[2] == 3:
-            bytes_per_line = 3 * img.shape[1]
-            qimg = QImage(img, img.shape[1],
-                          img.shape[0], bytes_per_line, QImage.Format_BGR888)
-        elif img.shape[2] == 4:
-            bytes_per_line = 4 * img.shape[1]
-            qimg = QImage(img, img.shape[1],
-                          img.shape[0], bytes_per_line, QImage.Format_RGBA8888)
-        else:
-            critical_win("图片格式不能解析")
-        scene.addPixmap(QPixmap.fromImage(qimg))
-        return True
-    return False
 
 
 def critical_win(string: str, parent=None):

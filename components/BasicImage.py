@@ -37,6 +37,11 @@ class ImageBasic:
             return '.'
         return dirname(self.imgpath)
 
+    def get_basename(self):
+        if self.imgpath == '':
+            return ''
+        return basename(self.imgpath)
+
     def remove_image(self):
         self.img = None
         if isfile(self.imgpath) is False:

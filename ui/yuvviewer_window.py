@@ -82,10 +82,10 @@ class Ui_YUVEditor(object):
         self.photo_title.setObjectName(u"photo_title")
         self.gridLayout_3 = QGridLayout(self.photo_title)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
 
-        self.gridLayout_3.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.gridLayout_3.addLayout(self.horizontalLayout, 0, 0, 1, 1)
 
 
         self.gridLayout_2.addWidget(self.photo_title, 0, 0, 1, 1)

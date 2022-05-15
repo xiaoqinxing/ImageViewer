@@ -1,6 +1,7 @@
 import datetime
 import os
 import logging
+from PySide2.QtWidgets import QMessageBox
 
 # 设置日志存放路径
 LOGFILE_PATH = '.\\log\\'
@@ -34,3 +35,17 @@ def clean_old_log():
     for i in os.listdir(LOGFILE_PATH):
         if i != TODAY_DATE + '.log':
             os.remove(LOGFILE_PATH + i)
+
+
+def critical_win(string: str, parent=None):
+    if(string is not None):
+        QMessageBox.critical(
+            parent, '警告', string, QMessageBox.Yes, QMessageBox.Yes)
+    return
+
+
+def info_win(string: str, parent=None):
+    if(string is not None):
+        QMessageBox.information(
+            parent, '提示', string, QMessageBox.Yes, QMessageBox.Yes)
+    return
