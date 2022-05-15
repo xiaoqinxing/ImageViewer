@@ -167,7 +167,7 @@ class ImageView(QGraphicsView):
         self.__update_point_stats()
         return super().wheelEvent(event)
 
-    def dropEvent(self, event):
+    def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
             urls = event.mimeData().urls()
             filename = urls[-1].path()[1:]
