@@ -12,24 +12,26 @@ class ImageViewer(QMainWindow):
         self.config = YUVConfig()
         self.info_bar = QLabel()
         self.ui.statusBar.addPermanentWidget(self.info_bar, stretch=8)
-        # self.config.configUpdateEvent.connect(
-        #     lambda: self.__init_img(self.img.imgpath))  # 配置界面参数更新
         self.imageview_wins = []
         self.add_compare()
 
         self.ui.openimage.triggered.connect(self.on_open_img)
-        # self.ui.saveimage.triggered.connect(self.save_now_image)
         self.ui.actionstats.triggered.connect(self.on_calc_stats)
         self.ui.nextphoto.triggered.connect(self.switch_next_photo)
         self.ui.prephoto.triggered.connect(self.switch_pre_photo)
-        # self.imageview_wins.rubberBandChanged.connect(self.update_stats_range)
-        # self.ui.deletephoto.triggered.connect(self.delete_photo)
         self.ui.rotateright.triggered.connect(self.rotate_photo)
         self.ui.yuvconfig.triggered.connect(self.config.show)  # 配置UI显示
-        # self.imageview_wins[0].updatePointStatusEvent.connect(
-        #     self.update_point_status)
         self.ui.add_compare.triggered.connect(self.add_compare)
         self.ui.delcompare.triggered.connect(self.del_compare)
+        # self.ui.saveimage.triggered.connect(self.save_now_image)
+        # self.ui.deletephoto.triggered.connect(self.delete_photo)
+        self.config.configUpdateEvent.connect(self.update_yuv_config)
+
+    def update_yuv_config(self):
+        for imgviewwin in self.imageview_wins:
+            imgviewwin.img.load_yuv_config(
+                self.config.width, self.config.height, self.config.yuv_format)
+            imgviewwin.reload_image()
 
     def add_compare(self):
         imgviewwin = ImageView(self.ui.horizontalLayout, self)

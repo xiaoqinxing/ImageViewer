@@ -124,6 +124,10 @@ class ImageView(QGraphicsView):
         except ImageToolError as err:
             err.show()
 
+    def reload_image(self):
+        if self.img.img is not None:
+            self.init_image(self.img.imgpath)
+
     def rotate_photo(self, need_saveimg_in_rotate):
         try:
             self.img.rotate90()
