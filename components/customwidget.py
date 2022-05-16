@@ -78,11 +78,17 @@ class ImageView(QGraphicsView):
         return super().wheelEvent(event)
 
     def dragEnterEvent(self, event):
+        event.accept()
+
+    def dragMoveEvent(self, event):
+        event.accept()
+
+    def dropEvent(self, event):
         if event.mimeData().hasUrls():
             urls = event.mimeData().urls()
             filename = urls[-1].path()[1:]
             self.init_image(filename)
-        event.accept()
+        return super().dropEvent(event)
 
     def __update_point_stats(self):
         if self.img.img is not None:
