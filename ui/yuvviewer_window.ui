@@ -96,6 +96,7 @@
    <addaction name="nextphoto"/>
    <addaction name="rotateright"/>
    <addaction name="add_compare"/>
+   <addaction name="delcompare"/>
   </widget>
   <action name="saveimage">
    <property name="icon">
@@ -197,6 +198,15 @@
    </property>
    <property name="text">
     <string>YUV配置</string>
+   </property>
+  </action>
+  <action name="delcompare">
+   <property name="icon">
+    <iconset resource="../components/resource.qrc">
+     <normaloff>:/tool_icon/resource/subtract.png</normaloff>:/tool_icon/resource/subtract.png</iconset>
+   </property>
+   <property name="text">
+    <string>减少对比图片</string>
    </property>
   </action>
  </widget>

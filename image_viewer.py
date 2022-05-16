@@ -1,7 +1,7 @@
 from PySide2.QtWidgets import QFileDialog, QMainWindow, QLabel
 from ui.yuvviewer_window import Ui_YUVEditor
 from image_config import YUVConfig
-from image_view_win import ImageViewWin
+from components.customwidget import ImageView
 
 
 class ImageViewer(QMainWindow):
@@ -14,8 +14,8 @@ class ImageViewer(QMainWindow):
         self.ui.statusBar.addPermanentWidget(self.info_bar, stretch=8)
         # self.config.configUpdateEvent.connect(
         #     lambda: self.__init_img(self.img.imgpath))  # 配置界面参数更新
-
-        self.imageview_wins = [ImageViewWin(self.ui.horizontalLayout, self)]
+        self.imageview_wins = []
+        self.add_compare()
 
         self.ui.openimage.triggered.connect(self.on_open_img)
         # self.ui.saveimage.triggered.connect(self.save_now_image)
@@ -28,12 +28,17 @@ class ImageViewer(QMainWindow):
         self.ui.yuvconfig.triggered.connect(self.config.show)  # 配置UI显示
         # self.imageview_wins[0].updatePointStatusEvent.connect(
         #     self.update_point_status)
+        self.ui.add_compare.triggered.connect(self.add_compare)
+        self.ui.delcompare.triggered.connect(self.del_compare)
 
-    # def delete_photo(self):
-    #     self.img.remove_image()
-    #     next_photo, index, files_nums = self.img.find_next_time_photo(1)
-    #     self.img_index_str = "({}/{})".format(index, files_nums - 1)
-    #     self.__init_img(next_photo, self.img_index_str)
+    def add_compare(self):
+        imgviewwin = ImageView(self.ui.horizontalLayout, self)
+        imgviewwin.sigUpdatePointStatusEvent.connect(self.update_point_status)
+        self.imageview_wins.append(imgviewwin)
+
+    def del_compare(self):
+        imgviewwin = self.imageview_wins.pop()
+        imgviewwin.Exit(self.ui.horizontalLayout)
 
     def switch_next_photo(self):
         for imgviewwin in self.imageview_wins:
@@ -53,14 +58,6 @@ class ImageViewer(QMainWindow):
         for imgviewwin in self.imageview_wins:
             imgviewwin.init_image(imagepath[0])
 
-    # def save_now_image(self):
-    #     try:
-    #         imagepath = QFileDialog.getSaveFileName(
-    #             None, '保存图片', self.img.get_dir(), "Images (*.jpg)")
-    #         if imagepath[0] != '':
-    #             self.img.save_image(imagepath[0])
-    #     except ImageToolError as e:
-    #         e.show()
     def update_point_status(self, point_status):
         self.info_bar.setText(point_status)
 

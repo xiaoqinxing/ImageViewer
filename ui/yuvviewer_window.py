@@ -74,6 +74,11 @@ class Ui_YUVEditor(object):
         icon9 = QIcon()
         icon9.addFile(u":/tool_icon/resource/config.png", QSize(), QIcon.Normal, QIcon.Off)
         self.yuvconfig.setIcon(icon9)
+        self.delcompare = QAction(YUVEditor)
+        self.delcompare.setObjectName(u"delcompare")
+        icon10 = QIcon()
+        icon10.addFile(u":/tool_icon/resource/subtract.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.delcompare.setIcon(icon10)
         self.centralwidget = QWidget(YUVEditor)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
@@ -116,6 +121,7 @@ class Ui_YUVEditor(object):
         self.toolBar.addAction(self.nextphoto)
         self.toolBar.addAction(self.rotateright)
         self.toolBar.addAction(self.add_compare)
+        self.toolBar.addAction(self.delcompare)
 
         self.retranslateUi(YUVEditor)
 
@@ -157,6 +163,7 @@ class Ui_YUVEditor(object):
         self.add_compare.setText(QCoreApplication.translate("YUVEditor", u"\u6dfb\u52a0\u5bf9\u6bd4\u56fe\u7247", None))
         self.rotateright.setText(QCoreApplication.translate("YUVEditor", u"\u987a\u65f6\u9488\u65cb\u8f6c", None))
         self.yuvconfig.setText(QCoreApplication.translate("YUVEditor", u"YUV\u914d\u7f6e", None))
+        self.delcompare.setText(QCoreApplication.translate("YUVEditor", u"\u51cf\u5c11\u5bf9\u6bd4\u56fe\u7247", None))
         self.photo_title.setTitle("")
         self.toolBar.setWindowTitle(QCoreApplication.translate("YUVEditor", u"toolBar_2", None))
     # retranslateUi
