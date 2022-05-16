@@ -9,3 +9,4 @@ config/
 *.exe
 *.raw
 log/
+.pytest_cache/
