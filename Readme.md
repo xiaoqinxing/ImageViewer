@@ -26,9 +26,9 @@
 3. 点击右侧按钮，查看统计信息，会跳出统计信息窗口，可以通过框选，调整显示区域
 4. 点击增加和减少对比窗口可以增加或减少对比窗口，如图，创建了 3 个对比窗口
 
-![yuv查看工具](https://files.qinxing.xyz/yuv%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7.png)
+![yuv查看工具](https://github.com/xiaoqinxing/ImageViewer/raw/main/test/resource/8.png)
 
-![统计信息窗口](https://files.qinxing.xyz/%E7%BB%9F%E8%AE%A1%E4%BF%A1%E6%81%AF%E7%AA%97%E5%8F%A3.png)
+![统计信息窗口](https://github.com/xiaoqinxing/ImageViewer/raw/main/test/resource/7.png)
 
 ## 将要实现的功能点
 
