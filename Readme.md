@@ -8,6 +8,12 @@
 2. 多张 yuv 之间的对比也比较麻烦
 3. 缺乏 yuv 的分析工具
 
+## 界面
+
+![yuv查看工具](https://files.qinxing.xyz/yuv%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7.png)
+
+![统计信息窗口](https://files.qinxing.xyz/%E7%BB%9F%E8%AE%A1%E4%BF%A1%E6%81%AF%E7%AA%97%E5%8F%A3.png)
+
 ## 将要实现的功能点
 
 - [x] 能够支持常见的 yuv 格式
