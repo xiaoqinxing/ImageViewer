@@ -34,8 +34,16 @@ class ImageViewer(QMainWindow):
 
     def add_compare(self):
         imgviewwin = ImageView(self.ui.horizontalLayout, self)
+        imgviewwin.filenameUpdateEvent.connect(self.update_filename)
         imgviewwin.sigUpdatePointStatusEvent.connect(self.update_point_status)
         self.imageview_wins.append(imgviewwin)
+
+    def update_filename(self):
+        filenamelist = []
+        for imgviewwin in self.imageview_wins:
+            if imgviewwin.imageFileName != '':
+                filenamelist.append('【' + imgviewwin.imageFileName + '】')
+        self.ui.photo_title.setTitle('  VS  '.join(filenamelist))
 
     def del_compare(self):
         imgviewwin = self.imageview_wins.pop()

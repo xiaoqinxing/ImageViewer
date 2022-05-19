@@ -48,6 +48,9 @@
       <property name="title">
        <string/>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout"/>

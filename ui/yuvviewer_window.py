@@ -85,6 +85,7 @@ class Ui_YUVEditor(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.photo_title = QGroupBox(self.centralwidget)
         self.photo_title.setObjectName(u"photo_title")
+        self.photo_title.setAlignment(Qt.AlignCenter)
         self.gridLayout_3 = QGridLayout(self.photo_title)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.horizontalLayout = QHBoxLayout()

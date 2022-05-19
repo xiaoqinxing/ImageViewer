@@ -12,7 +12,7 @@ class ImageView(QGraphicsView):
     """
     img = ImageBasic()
     sigUpdatePointStatusEvent = Signal(str)  # 注意 signal不能嵌套
-    filenameUpdateEvent = Signal(str)
+    filenameUpdateEvent = Signal()
     sigRectDataEvent = Signal(list)
     rect = [0, 0, 0, 0]
     sceneMousePos = QPointF()
@@ -21,6 +21,7 @@ class ImageView(QGraphicsView):
     scale_ratio = 1.0
     img_index_str = ''
     hist_window = None
+    imageFileName = ''
 
     def __init__(self, layout, parent=None):
         self.scene = QGraphicsScene()
@@ -104,8 +105,8 @@ class ImageView(QGraphicsView):
         try:
             if self.img.img is not None:
                 self.img.display_in_scene(self.scene)
-                self.filenameUpdateEvent.emit(
-                    self.img_index_str + self.img.get_basename())
+                self.imageFileName = self.img_index_str + self.img.get_basename()
+                self.filenameUpdateEvent.emit()
                 if self.dragMode() == QGraphicsView.RubberBandDrag:
                     self.sigRectDataEvent.emit(self.rect)
                 if self.hist_window is not None and self.hist_window.enable is True:
