@@ -115,8 +115,6 @@ class ImageView(QGraphicsView):
 
     def init_image(self, filename):
         try:
-            # self.img.load_yuv_config(
-            #     self.config.width, self.config.height, self.config.yuv_format)
             self.img.load_file(filename)
             _, index, files_nums = self.img.find_next_time_photo(0)
             self.img_index_str = "({}/{})".format(index + 1, files_nums)

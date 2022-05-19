@@ -29,8 +29,7 @@ class ImageViewer(QMainWindow):
 
     def update_yuv_config(self):
         for imgviewwin in self.imageview_wins:
-            imgviewwin.img.load_yuv_config(
-                self.config.width, self.config.height, self.config.yuv_format)
+            imgviewwin.img.load_yuv_config(self.config.format)
             imgviewwin.reload_image()
 
     def add_compare(self):

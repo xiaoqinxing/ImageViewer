@@ -18,13 +18,24 @@ YUV_FORMAT_MAP = {
 }
 
 
+class YuvParam:
+    """YUV图像参数"""
+    height = 2160
+    width = 3840
+    yuv_format = 'NV21'
+
+
 class ImageBasic:
+    """
+    基础图像组件
+    具有加载图片，显示，以及基本的图像旋转等操作
+    """
     img = None
     imgpath = ''  # 图片路径
     height = 0
     width = 0
     depth = 0  # 通道数
-    yuv_format = ''
+    yuv_param = YuvParam()
 
     def __update_attr(self):
         if (self.img is not None):
@@ -48,10 +59,8 @@ class ImageBasic:
             return
         remove(self.imgpath)
 
-    def load_yuv_config(self, width, height, yuv_format):
-        self.width = width
-        self.height = height
-        self.yuv_format = yuv_format
+    def load_yuv_config(self, yuv_param: YuvParam):
+        self.yuv_param = yuv_param
 
     def load_file(self, filename):
         if isfile(filename) is False:
@@ -72,18 +81,18 @@ class ImageBasic:
         self.__update_attr()
 
     def __load_yuvfile(self, filename):
-        yuv_format = YUV_FORMAT_MAP.get(self.yuv_format)
+        yuv_format = YUV_FORMAT_MAP.get(self.yuv_param.yuv_format)
         if yuv_format is None:
             raise ImageFormatNotSupportErr
 
         yuvdata = np.fromfile(filename, dtype=np.uint8)
         if yuvdata is None:
             raise ImageNoneErr
-        if self.yuv_format in ['NV21', 'NV12', 'YUV420']:
+        if self.yuv_param.yuv_format in ['NV21', 'NV12', 'YUV420']:
             if len(yuvdata) != self.height * self.width * 3 / 2:
                 raise ImageFormatErr
             yuvdata = yuvdata.reshape(self.height * 3 // 2, self.width)
-        elif self.yuv_format in ['YCrCb', 'YUV422', 'UYVY', 'YUYV', 'YVYU']:
+        elif self.yuv_param.yuv_format in ['YCrCb', 'YUV422', 'UYVY', 'YUYV', 'YVYU']:
             if len(yuvdata) != self.height * self.width * 2:
                 raise ImageFormatErr
             yuvdata = yuvdata.reshape(self.height * 2, self.width)
