@@ -137,9 +137,9 @@ class ImageView(QGraphicsView):
             err.show()
 
     def delete_photo(self):
-        self.img.remove_image()
         next_photo, index, files_nums = self.img.find_next_time_photo(1)
         self.img_index_str = "({}/{})".format(index, files_nums - 1)
+        self.img.remove_image()
         self.init_image(next_photo)
 
     def switch_next_photo(self):

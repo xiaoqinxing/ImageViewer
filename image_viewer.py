@@ -24,7 +24,7 @@ class ImageViewer(QMainWindow):
         self.ui.add_compare.triggered.connect(self.add_compare)
         self.ui.delcompare.triggered.connect(self.del_compare)
         # self.ui.saveimage.triggered.connect(self.save_now_image)
-        # self.ui.deletephoto.triggered.connect(self.delete_photo)
+        self.ui.deletephoto.triggered.connect(self.delete_photo)
         self.config.configUpdateEvent.connect(self.update_yuv_config)
 
     def update_yuv_config(self):
@@ -60,6 +60,10 @@ class ImageViewer(QMainWindow):
     def rotate_photo(self):
         for imgviewwin in self.imageview_wins:
             imgviewwin.rotate_photo(True)
+
+    def delete_photo(self):
+        for imgviewwin in self.imageview_wins:
+            imgviewwin.delete_photo()
 
     def on_open_img(self):
         imagepath = QFileDialog.getOpenFileName(
