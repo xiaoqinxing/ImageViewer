@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QFileDialog, QMainWindow, QLabel
+from PySide2.QtWidgets import QMainWindow, QLabel
 from ui.yuvviewer_window import Ui_YUVEditor
 from image_config import YUVConfig
 from components.customwidget import ImageView
@@ -23,7 +23,7 @@ class ImageViewer(QMainWindow):
         self.ui.yuvconfig.triggered.connect(self.config.show)  # 配置UI显示
         self.ui.add_compare.triggered.connect(self.add_compare)
         self.ui.delcompare.triggered.connect(self.del_compare)
-        # self.ui.saveimage.triggered.connect(self.save_now_image)
+        self.ui.saveimage.triggered.connect(self.on_save_photo)
         self.ui.deletephoto.triggered.connect(self.delete_photo)
         self.config.configUpdateEvent.connect(self.update_yuv_config)
 
@@ -65,11 +65,13 @@ class ImageViewer(QMainWindow):
         for imgviewwin in self.imageview_wins:
             imgviewwin.delete_photo()
 
-    def on_open_img(self):
-        imagepath = QFileDialog.getOpenFileName(
-            None, '打开图片', '.', "Images (*.jpg *.png *.bmp *.yuv)")
+    def on_save_photo(self):
         for imgviewwin in self.imageview_wins:
-            imgviewwin.init_image(imagepath[0])
+            imgviewwin.save_image()
+
+    def on_open_img(self):
+        for imgviewwin in self.imageview_wins:
+            imgviewwin.open_image()
 
     def update_point_status(self, point_status):
         self.info_bar.setText(point_status)

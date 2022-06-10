@@ -1,5 +1,5 @@
 from PySide2.QtCore import Signal, QPointF, Qt
-from PySide2.QtWidgets import QGraphicsView, QAbstractScrollArea, QLabel
+from PySide2.QtWidgets import QGraphicsView, QAbstractScrollArea, QLabel, QFileDialog
 from PySide2.QtWidgets import QMessageBox, QGraphicsScene
 from components.BasicImage import ImageBasic
 from components.status_code_enum import ImageToolError
@@ -120,6 +120,24 @@ class ImageView(QGraphicsView):
             _, index, files_nums = self.img.find_next_time_photo(0)
             self.img_index_str = "({}/{})".format(index + 1, files_nums)
             self.display()
+        except ImageToolError as err:
+            err.show()
+
+    def open_image(self):
+        try:
+            imagepath = QFileDialog.getOpenFileName(
+                None, '打开图片', self.img.get_dir(), "Images (*.jpg *.png *.bmp *.yuv)")
+            if imagepath[0] != '':
+                self.init_image(imagepath[0])
+        except ImageToolError as err:
+            err.show()
+
+    def save_image(self):
+        try:
+            imagepath = QFileDialog.getSaveFileName(
+                None, '保存图片', self.img.get_dir(), "JPEG Images (*.jpg);;PNG Images (*.png)")
+            if imagepath[0] != '':
+                self.img.save_image(imagepath[0])
         except ImageToolError as err:
             err.show()
 

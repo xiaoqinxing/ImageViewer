@@ -141,7 +141,12 @@ class ImageBasic:
         if isdir(dirname(filename)) is False:
             raise FilePathNotValidErr
         # 解决中文路径的问题, 不使用imwrite
-        cv2.imencode('.jpg', self.img)[1].tofile(filename)
+        if filename.split('.')[-1] == "jpg":
+            cv2.imencode('.jpg', self.img)[1].tofile(filename)
+        elif filename.split('.')[-1] == "png":
+            cv2.imencode('.png', self.img)[1].tofile(filename)
+        else:
+            raise ImageFormatNotSupportErr
 
     def get_img_point(self, x, y):
         """
