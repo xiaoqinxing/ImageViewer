@@ -89,13 +89,15 @@ class ImageBasic:
         if yuvdata is None:
             raise ImageNoneErr
         if self.yuv_param.yuv_format in ['NV21', 'NV12', 'YUV420']:
-            if len(yuvdata) != self.height * self.width * 3 / 2:
+            if len(yuvdata) != self.yuv_param.height * self.yuv_param.width * 3 / 2:
                 raise ImageFormatErr
-            yuvdata = yuvdata.reshape(self.height * 3 // 2, self.width)
+            yuvdata = yuvdata.reshape(
+                self.yuv_param.height * 3 // 2, self.yuv_param.width)
         elif self.yuv_param.yuv_format in ['YCrCb', 'YUV422', 'UYVY', 'YUYV', 'YVYU']:
-            if len(yuvdata) != self.height * self.width * 2:
+            if len(yuvdata) != self.yuv_param.height * self.yuv_param.width * 2:
                 raise ImageFormatErr
-            yuvdata = yuvdata.reshape(self.height * 2, self.width)
+            yuvdata = yuvdata.reshape(
+                self.yuv_param.height * 2, self.yuv_param.width)
         else:
             raise ImageFormatNotSupportErr
 
@@ -168,7 +170,7 @@ class ImageBasic:
         path = dirname(self.imgpath)
         img_name = basename(self.imgpath)
         filelist = [f for f in listdir(path) if isfile(
-            join(path, f)) and f.split('.')[-1] in ["jpg", "png", "bmp"]]
+            join(path, f)) and f.split('.')[-1] in ["jpg", "png", "bmp", "yuv"]]
         filelist = sorted(
             filelist,  key=lambda x: getmtime(join(path, x)))
         files_nums = len(filelist)
@@ -190,7 +192,7 @@ class ImageBasic:
         path = dirname(self.imgpath)
         img_name = basename(self.imgpath)
         filelist = [f for f in listdir(path) if isfile(
-            join(path, f)) and f.split('.')[-1] in ["jpg", "png", "bmp"]]
+            join(path, f)) and f.split('.')[-1] in ["jpg", "png", "bmp", "yuv"]]
         natsorted(filelist)
         files_nums = len(filelist)
         if img_name in filelist:
