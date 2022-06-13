@@ -27,11 +27,6 @@ class ImageViewer(QMainWindow):
         self.ui.deletephoto.triggered.connect(self.delete_photo)
         self.config.configUpdateEvent.connect(self.update_yuv_config)
 
-    def update_yuv_config(self):
-        for imgviewwin in self.imageview_wins:
-            imgviewwin.img.load_yuv_config(self.config.format)
-            imgviewwin.reload_image()
-
     def add_compare(self):
         imgviewwin = ImageView(self.ui.horizontalLayout, self)
         imgviewwin.filenameUpdateEvent.connect(self.update_filename)
@@ -45,32 +40,51 @@ class ImageViewer(QMainWindow):
                 filenamelist.append('【' + imgviewwin.imageFileName + '】')
         self.ui.photo_title.setTitle('  VS  '.join(filenamelist))
 
+    def update_yuv_config(self):
+        for imgviewwin in self.imageview_wins:
+            if imgviewwin.isFocus is False:
+                continue
+            imgviewwin.img.load_yuv_config(self.config.format)
+            imgviewwin.reload_image()
+
     def del_compare(self):
         imgviewwin = self.imageview_wins.pop()
         imgviewwin.Exit(self.ui.horizontalLayout)
 
     def switch_next_photo(self):
         for imgviewwin in self.imageview_wins:
+            if imgviewwin.isFocus is False:
+                continue
             imgviewwin.switch_next_photo()
 
     def switch_pre_photo(self):
         for imgviewwin in self.imageview_wins:
+            if imgviewwin.isFocus is False:
+                continue
             imgviewwin.switch_pre_photo()
 
     def rotate_photo(self):
         for imgviewwin in self.imageview_wins:
+            if imgviewwin.isFocus is False:
+                continue
             imgviewwin.rotate_photo(True)
 
     def delete_photo(self):
         for imgviewwin in self.imageview_wins:
+            if imgviewwin.isFocus is False:
+                continue
             imgviewwin.delete_photo()
 
     def on_save_photo(self):
         for imgviewwin in self.imageview_wins:
+            if imgviewwin.isFocus is False:
+                continue
             imgviewwin.save_image()
 
     def on_open_img(self):
         for imgviewwin in self.imageview_wins:
+            if imgviewwin.isFocus is False:
+                continue
             imgviewwin.open_image()
 
     def update_point_status(self, point_status):

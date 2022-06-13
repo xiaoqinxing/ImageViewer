@@ -22,6 +22,7 @@ class ImageView(QGraphicsView):
     img_index_str = ''
     hist_window = None
     imageFileName = ''
+    isFocus = False
 
     def __init__(self, layout, parent=None):
         self.scene = QGraphicsScene()
@@ -45,6 +46,15 @@ class ImageView(QGraphicsView):
         self.setTransformationAnchor(
             QGraphicsView.AnchorViewCenter)
         self.setResizeAnchor(QGraphicsView.AnchorViewCenter)
+        self.setFocusPolicy(Qt.ClickFocus)
+
+    def focusInEvent(self, QFocusEvent):
+        self.isFocus = True
+        return super().focusInEvent(QFocusEvent)
+
+    def focusOutEvent(self, QFocusEvent):
+        self.isFocus = False
+        return super().focusOutEvent(QFocusEvent)
 
     def mousePressEvent(self, event):
         self.startRectPos = self.mapToScene(event.pos())
