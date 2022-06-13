@@ -14,6 +14,7 @@ class ImageViewer(QMainWindow):
         self.ui.statusBar.addPermanentWidget(self.info_bar, stretch=8)
         self.imageview_wins = []
         self.add_compare()
+        self.imageview_wins[0].isFocus = True
 
         self.ui.openimage.triggered.connect(self.on_open_img)
         self.ui.actionstats.triggered.connect(self.on_calc_stats)
