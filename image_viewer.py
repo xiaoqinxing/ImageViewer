@@ -14,7 +14,6 @@ class ImageViewer(QMainWindow):
         self.ui.statusBar.addPermanentWidget(self.info_bar, stretch=8)
         self.imageview_wins = []
         self.add_compare()
-        self.imageview_wins[0].isFocus = True
 
         self.ui.openimage.triggered.connect(self.on_open_img)
         self.ui.actionstats.triggered.connect(self.on_calc_stats)
@@ -34,6 +33,12 @@ class ImageViewer(QMainWindow):
         imgviewwin.sigUpdatePointStatusEvent.connect(self.update_point_status)
         self.imageview_wins.append(imgviewwin)
 
+    def get_current_imageview_win(self):
+        for imgviewwin in self.imageview_wins:
+            if imgviewwin.isFocus is True:
+                return imgviewwin
+        return self.imageview_wins[0]
+
     def update_filename(self):
         filenamelist = []
         for imgviewwin in self.imageview_wins:
@@ -42,55 +47,43 @@ class ImageViewer(QMainWindow):
         self.ui.photo_title.setTitle('  VS  '.join(filenamelist))
 
     def update_yuv_config(self):
-        for imgviewwin in self.imageview_wins:
-            if imgviewwin.isFocus is False:
-                continue
-            imgviewwin.img.load_yuv_config(self.config.format)
-            imgviewwin.reload_image()
+        imgviewwin = self.get_current_imageview_win()
+        imgviewwin.img.load_yuv_config(self.config.format)
+        imgviewwin.reload_image()
 
     def del_compare(self):
+        if len(self.imageview_wins) <= 1:
+            return
         imgviewwin = self.imageview_wins.pop()
         imgviewwin.Exit(self.ui.horizontalLayout)
 
     def switch_next_photo(self):
-        for imgviewwin in self.imageview_wins:
-            if imgviewwin.isFocus is False:
-                continue
-            imgviewwin.switch_next_photo()
+        imgviewwin = self.get_current_imageview_win()
+        imgviewwin.switch_next_photo()
 
     def switch_pre_photo(self):
-        for imgviewwin in self.imageview_wins:
-            if imgviewwin.isFocus is False:
-                continue
-            imgviewwin.switch_pre_photo()
+        imgviewwin = self.get_current_imageview_win()
+        imgviewwin.switch_pre_photo()
 
     def rotate_photo(self):
-        for imgviewwin in self.imageview_wins:
-            if imgviewwin.isFocus is False:
-                continue
-            imgviewwin.rotate_photo(True)
+        imgviewwin = self.get_current_imageview_win()
+        imgviewwin.rotate_photo(True)
 
     def delete_photo(self):
-        for imgviewwin in self.imageview_wins:
-            if imgviewwin.isFocus is False:
-                continue
-            imgviewwin.delete_photo()
+        imgviewwin = self.get_current_imageview_win()
+        imgviewwin.delete_photo()
 
     def on_save_photo(self):
-        for imgviewwin in self.imageview_wins:
-            if imgviewwin.isFocus is False:
-                continue
-            imgviewwin.save_image()
+        imgviewwin = self.get_current_imageview_win()
+        imgviewwin.save_image()
 
     def on_open_img(self):
-        for imgviewwin in self.imageview_wins:
-            if imgviewwin.isFocus is False:
-                continue
-            imgviewwin.open_image()
+        imgviewwin = self.get_current_imageview_win()
+        imgviewwin.open_image()
 
     def update_point_status(self, point_status):
         self.info_bar.setText(point_status)
 
     def on_calc_stats(self):
-        for imgviewwin in self.imageview_wins:
-            imgviewwin.on_calc_stats()
+        imgviewwin = self.get_current_imageview_win()
+        imgviewwin.on_calc_stats()
