@@ -79,10 +79,10 @@ class ImageView(QGraphicsView):
         angle = event.angleD.y()
         self.sceneMousePos = self.mapToScene(event.pos())
         self.centerOn(self.sceneMousePos)
-        if (angle > 0):
+        if angle > 0:
             self.scale(1.25, 1.25)
             self.scale_ratio *= 1.25
-        else:
+        elif self.scale_ratio > 0.05:
             self.scale(0.8, 0.8)
             self.scale_ratio *= 0.8
         self.__update_point_stats()
