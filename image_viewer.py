@@ -11,7 +11,10 @@ class ImageViewer(QMainWindow):
         self.ui.setupUi(self)
         self.config = YUVConfig()
         self.info_bar = QLabel()
+        self.focus_info_bar = QLabel()
+        self.focus_index = 0
         self.ui.statusBar.addPermanentWidget(self.info_bar, stretch=8)
+        self.ui.statusBar.addPermanentWidget(self.focus_info_bar, stretch=1)
         self.imageview_wins = []
         self.add_compare()
 
@@ -31,13 +34,23 @@ class ImageViewer(QMainWindow):
         imgviewwin = ImageView(self.ui.horizontalLayout, self)
         imgviewwin.filenameUpdateEvent.connect(self.update_filename)
         imgviewwin.sigUpdatePointStatusEvent.connect(self.update_point_status)
+        imgviewwin.focusOnEvent.connect(self.update_focus_index)
         self.imageview_wins.append(imgviewwin)
 
-    def get_current_imageview_win(self):
-        for imgviewwin in self.imageview_wins:
+    def update_focus_index(self):
+        for index, imgviewwin in enumerate(self.imageview_wins):
             if imgviewwin.isFocus is True:
-                return imgviewwin
-        return self.imageview_wins[0]
+                self.focus_index = index
+                self.focus_info_bar.setText(
+                    '当前选中第{}个窗口'.format(index + 1))
+                return
+        self.focus_info_bar.setText('当前选中第1个窗口')
+        self.focus_index = 0
+
+    def get_current_imageview_win(self):
+        if self.focus_index >= len(self.imageview_wins):
+            return self.imageview_wins[-1]
+        return self.imageview_wins[self.focus_index]
 
     def update_filename(self):
         filenamelist = []

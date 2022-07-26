@@ -16,6 +16,7 @@ class ImageView(QGraphicsView):
     sceneMousePos = QPointF()
     startRectPos = QPointF()
     endRectPos = QPointF()
+    focusOnEvent = Signal()
 
     def __init__(self, layout, parent=None):
         self.img = ImageBasic()
@@ -50,6 +51,7 @@ class ImageView(QGraphicsView):
 
     def focusInEvent(self, QFocusEvent):
         self.isFocus = True
+        self.focusOnEvent.emit()
         return super().focusInEvent(QFocusEvent)
 
     def focusOutEvent(self, QFocusEvent):
