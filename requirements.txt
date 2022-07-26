@@ -1,5 +1,5 @@
 pyside2
 numpy
-opencv-python
+opencv-python==4.5.4.60
 natsort
 matplotlib
