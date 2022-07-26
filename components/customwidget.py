@@ -10,21 +10,21 @@ class ImageView(QGraphicsView):
     """
     自定义的图片显示（可以获取到鼠标位置和放大比例）
     """
-    img = ImageBasic()
     sigUpdatePointStatusEvent = Signal(str)  # 注意 signal不能嵌套
     filenameUpdateEvent = Signal()
     sigRectDataEvent = Signal(list)
-    rect = [0, 0, 0, 0]
     sceneMousePos = QPointF()
     startRectPos = QPointF()
     endRectPos = QPointF()
-    scale_ratio = 1.0
-    img_index_str = ''
-    hist_window = None
-    imageFileName = ''
-    isFocus = False
 
     def __init__(self, layout, parent=None):
+        self.img = ImageBasic()
+        self.rect = [0, 0, 0, 0]
+        self.scale_ratio = 1.0
+        self.img_index_str = ''
+        self.hist_window = None
+        self.imageFileName = ''
+        self.isFocus = False
         self.scene = QGraphicsScene()
         super().__init__(self.scene, parent)
         self.setUi()

@@ -20,9 +20,11 @@ YUV_FORMAT_MAP = {
 
 class YuvParam:
     """YUV图像参数"""
-    height = 2160
-    width = 3840
-    yuv_format = 'NV21'
+
+    def __init__(self):
+        self.height = 2160
+        self.width = 3840
+        self.yuv_format = 'NV21'
 
 
 class ImageBasic:
@@ -30,12 +32,14 @@ class ImageBasic:
     基础图像组件
     具有加载图片，显示，以及基本的图像旋转等操作
     """
-    img = None
-    imgpath = ''  # 图片路径
-    height = 0
-    width = 0
-    depth = 0  # 通道数
-    yuv_param = YuvParam()
+
+    def __init__(self):
+        self.img = None
+        self.imgpath = ''  # 图片路径
+        self.height = 0
+        self.width = 0
+        self.depth = 0  # 通道数
+        self.yuv_param = YuvParam()
 
     def __update_attr(self):
         if (self.img is not None):
@@ -71,14 +75,14 @@ class ImageBasic:
             self.__load_yuvfile(filename)
         else:
             raise ImageFormatNotSupportErr
+        self.imgpath = filename
+        self.__update_attr()
 
     def __load_imagefile(self, filename):
         # 防止有中文，因此不使用imread
         self.img = cv2.imdecode(np.fromfile(filename, dtype=np.uint8), 1)
         if self.img is None:
             raise ImageReadErr
-        self.imgpath = filename
-        self.__update_attr()
 
     def __load_yuvfile(self, filename):
         yuv_format = YUV_FORMAT_MAP.get(self.yuv_param.yuv_format)
@@ -105,8 +109,6 @@ class ImageBasic:
             self.img = cv2.cvtColor(yuvdata, yuv_format)
         except Exception:
             raise ImageFormatErr
-        self.imgpath = filename
-        self.__update_attr()
 
     # display
     def display_in_scene(self, scene):
