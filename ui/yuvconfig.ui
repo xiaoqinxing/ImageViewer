@@ -50,22 +50,7 @@
           </item>
           <item>
            <property name="text">
-            <string>YCrCb</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
             <string>YUV420</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>YUV422</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>UYVY</string>
            </property>
           </item>
           <item>

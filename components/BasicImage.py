@@ -97,11 +97,19 @@ class ImageBasic:
                 raise ImageFormatErr
             yuvdata = yuvdata.reshape(
                 self.yuv_param.height * 3 // 2, self.yuv_param.width)
-        elif self.yuv_param.yuv_format in ['YCrCb', 'YUV422', 'UYVY', 'YUYV', 'YVYU']:
+        elif self.yuv_param.yuv_format in ['YUYV', 'YVYU']:
             if len(yuvdata) != self.yuv_param.height * self.yuv_param.width * 2:
                 raise ImageFormatErr
-            yuvdata = yuvdata.reshape(
-                self.yuv_param.height * 2, self.yuv_param.width)
+            px = self.yuv_param.height * self.yuv_param.width
+            y = yuvdata[0: px]
+            u = yuvdata[px: px * 3 // 2]
+            v = yuvdata[px * 3 // 2: px * 2]
+            uv = np.zeros_like(y)
+            uv[0::2] = u
+            uv[1::2] = v
+            y = y.reshape(self.yuv_param.height, self.yuv_param.width)
+            uv = uv.reshape(self.yuv_param.height, self.yuv_param.width)
+            yuvdata = cv2.merge((y, uv))
         else:
             raise ImageFormatNotSupportErr
 
